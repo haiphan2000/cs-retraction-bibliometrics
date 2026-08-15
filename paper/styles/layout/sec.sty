@@ -1,0 +1,30 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/layout/sec}[2026 Section Title Formatting]
+
+\RequirePackage{titlesec}
+
+% Tắt đánh số thứ tự cho section trên toàn tài liệu
+\setcounter{secnumdepth}{0}
+
+% Định dạng font chữ: Sans-serif (\sffamily), kích thước lớn (\Large), in đậm (\bfseries)
+\titleformat{\section}
+  {\sffamily\fontsize{18}{22}\selectfont\bfseries} % Định dạng font
+  {}                        % Không có nhãn số thứ tự
+  {0pt}                     % Khoảng cách
+  {}                        % Mã thực thi trước tiêu đề
+
+% Thiết lập khoảng cách: lề trái (0pt), khoảng cách trên (24pt), khoảng cách dưới (18pt)
+\titlespacing*{\section}{0pt}{18pt}{12pt}
+
+\titleformat{\subsection}
+  {\sffamily\fontsize{16}{20}\selectfont\bfseries} % Định dạng font
+  {}                        % Không có nhãn số thứ tự
+  {0pt}                     % Khoảng cách giữa nhãn và tiêu đề
+  {}                        % Mã thực thi trước tiêu đề
+
+% Khoảng cách lề xung quanh subsection (trái, trên, dưới)
+\titlespacing*{\subsection}{0pt}{12pt}{12pt}
+
+\setlength{\parindent}{15pt}
+
+\endinput

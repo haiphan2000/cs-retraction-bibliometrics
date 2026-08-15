@@ -1,0 +1,20 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/layout/references}[2026 References Formatting]
+
+
+\RequirePackage[american]{babel}
+\RequirePackage{csquotes}
+\RequirePackage[
+    backend=biber,
+    style=apa
+]{biblatex}
+
+\addbibresource{references/references.bib}
+
+% Configure hyperref to color citation links blue
+\RequirePackage{hyperref}
+\hypersetup{
+    citecolor=blue % This automatically colors and links only the year part in APA citations
+}
+
+\endinput

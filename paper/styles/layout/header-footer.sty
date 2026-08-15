@@ -1,0 +1,56 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/layout/header-footer}[2026 Header and Footer Configuration]
+
+\RequirePackage{fancyhdr}
+\RequirePackage{lastpage}
+\RequirePackage{url}
+\RequirePackage{hyperref}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+
+\definecolor{researchboxgray}{HTML}{BBBDC0}
+
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[LE,RO]{\robotocondensed \small Page \thepage\ of \pageref{LastPage}}
+\fancyhead[RE,LO]{\robotocondensed \small Scientometrics}
+
+\fancyfoot[LE,RO]{\raisebox{-0.5\height}{\includegraphics[height=18pt]{figures/common/springer-logo.png}}}
+
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\headrule}{
+    \vspace{3pt}
+    \hrule height\headrulewidth width\headwidth
+    \vspace{-3pt}
+}
+
+\fancypagestyle{firststyle}{
+    \fancyhf{}
+
+    \fancyhead[L]{
+        \parbox[b]{\headwidth}{
+            \robotocondensed \small
+            Scientometrics (2026)\\
+            https://doi.org/10.1007/s11192-999-test000\\[-2pt]
+            \rule{\headwidth}{1pt}\\[0pt]
+            \colorbox{researchboxgray}{
+                \parbox[c][0.5cm][c]{8cm}{
+                    \hspace{3pt}\sffamily\bfseries\small RESEARCH
+                }
+            }
+        }
+    }
+
+    \fancyfoot[RO]{\raisebox{-0.5\height}{\includegraphics[height=18pt]{figures/common/springer-logo.png}}}
+
+    \renewcommand{\headrulewidth}{0.0pt}
+    \renewcommand{\footrulewidth}{0.0pt}
+}
+
+\AtBeginDocument{
+    \thispagestyle{firststyle}
+    \vspace*{0pt}
+}
+
+\endinput

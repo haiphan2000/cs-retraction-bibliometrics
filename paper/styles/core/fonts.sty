@@ -1,0 +1,43 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/layout/font}[2026 Font Configuration]
+
+\ProvidesPackage{font}
+\RequirePackage{fontspec}
+
+% Khai báo đường dẫn mặc định đến thư mục chứa font
+\defaultfontfeatures{Path = fonts/}
+
+% --- 1. FONT CHÍNH (SERIF): TIMES NEW ROMAN ---
+\setmainfont{SVN-Times New Roman.ttf}[
+    BoldFont       = {SVN-Times New Roman Bold.ttf},
+    ItalicFont     = {SVN-Times New Roman Italic.ttf},
+    BoldItalicFont = {SVN-Times New Roman Bold Italic.ttf},
+    Scale          = 1.0
+]
+
+% --- 2. FONT KHÔNG CHÂN (SANS-SERIF): ROBOTO ---
+\setsansfont{Roboto-Regular.ttf}[
+    BoldFont       = {Roboto-Bold.ttf},
+    ItalicFont     = {Roboto-Italic.ttf},
+    BoldItalicFont = {Roboto-BoldItalic.ttf},
+    Scale          = 0.95 % Cân đối kích thước thị giác giữa Times và Roboto nếu cần
+]
+
+% --- 3. ĐỊNH NGHĨA THÊM CÁC TRỌNG SỐ ROBOTO (DÙNG CHO TIÊU ĐỀ/METADATA) ---
+\newfontfamily\robotolight{Roboto-Light.ttf}[
+    ItalicFont     = {Roboto-LightItalic.ttf}
+]
+
+\newfontfamily\robotomedium{Roboto-Medium.ttf}[
+    ItalicFont     = {Roboto-MediumItalic.ttf}
+]
+
+\newfontfamily\robotoblack{Roboto-Black.ttf}[
+    ItalicFont     = {Roboto-BlackItalic.ttf}
+]
+
+\newfontfamily\robotocondensed{Roboto-Condensed.ttf}[
+    BoldFont       = {Roboto-BoldCondensed.ttf},
+    ItalicFont     = {Roboto-CondensedItalic.ttf},
+    BoldItalicFont = {Roboto-BoldCondensedItalic.ttf}
+]

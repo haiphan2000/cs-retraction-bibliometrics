@@ -1,0 +1,76 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{styles/layout/figure-table}[2026 Figures & Tables Formatting]
+
+\RequirePackage{caption}
+\RequirePackage{float}
+\RequirePackage{longtable}
+
+\DeclareCaptionFont{highlightkeyword}{%
+    \robotocondensed\bfseries
+}
+
+\DeclareCaptionLabelFormat{vietnamesefigure}{Hình #2}
+\DeclareCaptionLabelFormat{vietnamesetable}{Bảng #2}
+\DeclareCaptionLabelSeparator{thinspace}{\quad}
+
+\setlength{\intextsep}{3pt}
+\setlength{\textfloatsep}{3pt}
+\setlength{\floatsep}{3pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\belowcaptionskip}{3pt}
+
+\captionsetup[figure]{
+    labelformat=vietnamesefigure,
+    labelsep=thinspace,
+    justification=raggedright,
+    singlelinecheck=false,
+    font=highlightkeyword,
+    labelfont=bf,
+    textfont=normal,
+    skip=3pt,
+}
+
+\captionsetup[table]{
+    labelformat=vietnamesetable,
+    labelsep=thinspace,
+    justification=raggedright,
+    singlelinecheck=false,
+    font=highlightkeyword,
+    labelfont=bf,
+    textfont=normal,
+    skip=6pt,
+}
+
+\captionsetup[longtable]{
+    format=plain,
+    indention=0pt,
+    margin=0pt,
+    labelformat=vietnamesetable,
+    labelsep=thinspace,
+    justification=raggedright,
+    singlelinecheck=false,
+    font=highlightkeyword,
+    labelfont=bf,
+    textfont=normal,
+    skip=6pt,
+}
+
+\setlength{\LTpre}{3pt}
+\setlength{\LTpost}{3pt}
+
+\newcommand{\figref}[1]{%
+    \begingroup%
+        \hypersetup{linkcolor=blue}%
+        \ref{#1}%
+    \endgroup%
+}
+
+\newcommand{\tableref}[1]{%
+    \begingroup%
+        \hypersetup{linkcolor=blue}%
+        \ref{#1}%
+    \endgroup%
+}
+
+\endinput
+```
