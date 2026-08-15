@@ -1,0 +1,38 @@
+reason_tag,reason_category
+Author Unresponsive,Transparency Issues
+Breach of Policy by Author,Authorship Issues
+Compromised Peer Review,Peer Review Issues
+Computer-Aided Content or Computer-Generated Content,Randomly Generated Content
+Concerns/Issues about Article,Data Concerns
+Concerns/Issues about Authorship/Affiliation,Authorship Issues
+Concerns/Issues about Data,Data Concerns
+Concerns/Issues about Human Subject Welfare,Ethical Issues
+Concerns/Issues about Image,Data Concerns
+Concerns/Issues about Peer Review,Peer Review Issues
+Concerns/Issues about Referencing/Attributions,Referencing Issues
+Concerns/Issues about Results and/or Conclusions,Data Concerns
+Concerns/Issues about Third Party Involvement,Legal Issues
+Conflict of Interest,Authorship Issues
+Date of Article and/or Notice Unknown,Others
+Duplication of/in Article,Duplication
+Error by Journal/Publisher,Error
+Error in Data,Error
+False/Forged Authorship,Authorship Issues
+Informed/Patient Consent - None/Withdrawn,Ethical Issues
+Investigation by Company/Institution,Legal Issues
+Investigation by Journal/Publisher,Legal Issues
+Investigation by Third Party,Legal Issues
+Lack of IRB/IACUC Approval and/or Compliance,Ethical Issues
+Objections by Author(s),Authorship Issues
+Objections by Third Party,Legal Issues
+Original Data and/or Images not Provided and/or not Available,Transparency Issues
+Paper Mill,Fraud
+Plagiarism of/in Article,Plagiarism
+Removed,Others
+Rogue Editor,Fraud
+Taken from Dissertation/Thesis,Plagiarism
+Temporary Removal,Others
+Unreliable Data,Data Concerns
+Unreliable Image,Data Concerns
+Unreliable Results and/or Conclusions,Data Concerns
+Upgrade/Update of Prior Notice(s),Others
