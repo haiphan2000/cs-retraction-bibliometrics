@@ -1,0 +1,7 @@
+# Draw.io temporary & backup files
+*.bkp
+.$*
+
+# Python cache files & folders
+__pycache__/
+*.py[cod]
