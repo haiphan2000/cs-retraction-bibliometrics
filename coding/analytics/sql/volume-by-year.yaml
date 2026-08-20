@@ -1,0 +1,17 @@
+model_name: volume-by-year
+description: "Calculates the annual volume of retracted papers by year"
+
+output_columns:
+  - retraction_year
+  - retraction_count
+
+sql: |
+  SELECT
+      EXTRACT(YEAR FROM retraction_date) AS retraction_year,
+      COUNT(doi) AS retraction_count
+  FROM
+      retraction
+  GROUP BY
+      EXTRACT(YEAR FROM retraction_date)
+  ORDER BY
+      retraction_year ASC;

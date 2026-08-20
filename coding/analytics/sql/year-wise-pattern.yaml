@@ -1,0 +1,28 @@
+model_name: year-wise-pattern
+description: "Year-wise distribution of retracted papers grouped by author count"
+
+output_columns:
+  - retraction_year
+  - "1 author"
+  - "2 authors"
+  - "3 authors"
+  - "4+ authors"
+
+sql: |
+  WITH author_count_per_doi AS (
+      SELECT
+          doi,
+          COUNT(author_id) AS total_authors
+      FROM retraction_author
+      GROUP BY doi
+  )
+  SELECT
+      EXTRACT(YEAR FROM r.retraction_date) AS retraction_year,
+      COUNT(CASE WHEN a.total_authors = 1 THEN 1 END) AS "1 author",
+      COUNT(CASE WHEN a.total_authors = 2 THEN 1 END) AS "2 authors",
+      COUNT(CASE WHEN a.total_authors = 3 THEN 1 END) AS "3 authors",
+      COUNT(CASE WHEN a.total_authors = 4 THEN 1 END) AS "4+ authors"
+  FROM retraction r
+  LEFT JOIN author_count_per_doi a ON r.doi = a.doi
+  GROUP BY retraction_year
+  ORDER BY retraction_year ASC
