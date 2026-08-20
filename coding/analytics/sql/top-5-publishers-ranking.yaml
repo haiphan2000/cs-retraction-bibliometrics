@@ -1,0 +1,54 @@
+model_name: top-5-publishers-ranking
+description: "Ranking of top 5 publishers with total_count, split by 2023 and excluding 2023, with all remaining publishers grouped into an 'Others' category"
+
+output_columns:
+  - publisher
+  - total_count
+  - count_2023
+  - count_excluding_2023
+
+sql: |
+  WITH base_data AS (
+      -- Bước 1: Lấy dữ liệu thô gồm publisher, doi và năm từ bảng retraction
+      SELECT 
+          publisher,
+          doi,
+          EXTRACT(YEAR FROM retraction_date) AS yr
+      FROM retraction
+      WHERE publisher IS NOT NULL
+  ),
+  publisher_ranking AS (
+      -- Bước 2: Tính tổng để xác định top 5 publishers
+      SELECT 
+          publisher, 
+          COUNT(doi) AS total_count
+      FROM base_data
+      GROUP BY publisher
+  ),
+  ranked AS (
+      -- Bước 3: Đánh số thứ tự (Rank) theo tổng số lượng giảm dần
+      SELECT 
+          publisher,
+          ROW_NUMBER() OVER (ORDER BY total_count DESC) AS rn
+      FROM publisher_ranking
+  ),
+  mapped_data AS (
+      -- Bước 4: Map các publisher ngoài top 5 thành 'Others'
+      SELECT 
+          CASE WHEN r.rn <= 5 THEN b.publisher ELSE 'Others' END AS display_publisher,
+          b.doi,
+          b.yr
+      FROM base_data b
+      JOIN ranked r ON b.publisher = r.publisher
+  )
+  -- Bước 5: Group by nhãn mới và sử dụng COUNT
+  SELECT 
+      display_publisher AS publisher,
+      COUNT(doi) AS total_count,
+      COUNT(CASE WHEN yr = 2023 THEN 1 END) AS count_2023,
+      COUNT(CASE WHEN yr != 2023 THEN 1 END) AS count_excluding_2023
+  FROM mapped_data
+  GROUP BY display_publisher
+  ORDER BY 
+      CASE WHEN display_publisher = 'Others' THEN 1 ELSE 0 END ASC, 
+      total_count DESC;

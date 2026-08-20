@@ -1,0 +1,54 @@
+model_name: top-5-journals-ranking
+description: "Ranking of top 5 journals with total_count, split by 2023 and excluding 2023, with all remaining journals grouped into an 'Others' category"
+
+output_columns:
+  - journal
+  - total_count
+  - count_2023
+  - count_excluding_2023
+
+sql: |
+  WITH base_data AS (
+      -- Bước 1: Lấy dữ liệu thô gồm journal, doi và năm từ bảng retraction
+      SELECT 
+          journal,
+          doi,
+          EXTRACT(YEAR FROM retraction_date) AS yr
+      FROM retraction
+      WHERE journal IS NOT NULL
+  ),
+  journal_ranking AS (
+      -- Bước 2: Tính tổng để xác định top 5 journals
+      SELECT 
+          journal, 
+          COUNT(doi) AS total_count
+      FROM base_data
+      GROUP BY journal
+  ),
+  ranked AS (
+      -- Bước 3: Đánh số thứ tự (Rank) theo tổng số lượng giảm dần
+      SELECT 
+          journal,
+          ROW_NUMBER() OVER (ORDER BY total_count DESC) AS rn
+      FROM journal_ranking
+  ),
+  mapped_data AS (
+      -- Bước 4: Map các journal ngoài top 5 thành 'Others'
+      SELECT 
+          CASE WHEN r.rn <= 5 THEN b.journal ELSE 'Others' END AS display_journal,
+          b.doi,
+          b.yr
+      FROM base_data b
+      JOIN ranked r ON b.journal = r.journal
+  )
+  -- Bước 5: Group by nhãn mới và sử dụng COUNT
+  SELECT 
+      display_journal AS journal,
+      COUNT(doi) AS total_count,
+      COUNT(CASE WHEN yr = 2023 THEN 1 END) AS count_2023,
+      COUNT(CASE WHEN yr != 2023 THEN 1 END) AS count_excluding_2023
+  FROM mapped_data
+  GROUP BY display_journal
+  ORDER BY 
+      CASE WHEN display_journal = 'Others' THEN 1 ELSE 0 END ASC, 
+      total_count DESC;

@@ -1,0 +1,43 @@
+model_name: reasons-cooccurrence
+description: "Co-occurrence network for retraction reasons using true Association Strength normalization formula"
+
+output_columns:
+  - reason_a
+  - reason_b
+  - freq_a
+  - freq_b
+  - freq_overlap
+  - weight
+
+sql: |
+  WITH individual_counts AS (
+      SELECT 
+          reason_tag, 
+          COUNT(doi) AS total_occurrences
+      FROM retraction_reason
+      GROUP BY reason_tag
+  ),
+  co_occurrences AS (
+      -- Bước 2: Tính số lần đồng xuất hiện (overlap) của từng cặp
+      SELECT 
+          r1.reason_tag AS reason_a,
+          r2.reason_tag AS reason_b,
+          COUNT(*) AS freq_overlap
+      FROM retraction_reason r1
+      JOIN retraction_reason r2 
+          ON r1.doi = r2.doi 
+          AND r1.reason_tag < r2.reason_tag
+      GROUP BY r1.reason_tag, r2.reason_tag
+  )
+  -- Bước 3: Trả về đầy đủ thông tin tần suất riêng lẻ, tần suất chung (overlap) và Association Strength
+  SELECT 
+      c.reason_a,
+      c.reason_b,
+      ROUND(SQRT(w1.total_occurrences), 1) AS freq_a,
+      ROUND(SQRT(w2.total_occurrences), 1) AS freq_b,
+      ROUND(SQRT(c.freq_overlap), 1),
+      CAST(c.freq_overlap AS FLOAT) / (freq_a * freq_b) AS weight
+  FROM co_occurrences c
+  JOIN individual_counts w1 ON c.reason_a = w1.reason_tag
+  JOIN individual_counts w2 ON c.reason_b = w2.reason_tag
+  ORDER BY freq_overlap DESC, weight DESC;

@@ -1,0 +1,54 @@
+model_name: top-5-subjects-ranking
+description: "Ranking of top 5 research subjects with total_count, split by 2023 and excluding 2023, with all remaining subjects grouped into an 'Others' category"
+
+output_columns:
+  - subject
+  - total_count
+  - count_2023
+  - count_excluding_2023
+
+sql: |
+  WITH base_data AS (
+      -- Bước 1: Lấy dữ liệu thô bao gồm subject và năm
+      SELECT 
+          rs.subject,
+          rs.doi,
+          EXTRACT(YEAR FROM r.retraction_date) AS yr
+      FROM retraction_subject rs
+      JOIN retraction r ON rs.doi = r.doi
+  ),
+  subject_ranking AS (
+      -- Bước 2: Tính tổng để xác định top 5
+      SELECT 
+          subject, 
+          COUNT(doi) AS total_count
+      FROM base_data
+      GROUP BY subject
+  ),
+  ranked AS (
+      -- Bước 3: Đánh số thứ tự (Rank)
+      SELECT 
+          subject,
+          ROW_NUMBER() OVER (ORDER BY total_count DESC) AS rn
+      FROM subject_ranking
+  ),
+  mapped_data AS (
+      -- Bước 4: Map các subject ngoài top 5 thành 'Others'
+      SELECT 
+          CASE WHEN r.rn <= 5 THEN b.subject ELSE 'Others' END AS display_subject,
+          b.doi,
+          b.yr
+      FROM base_data b
+      JOIN ranked r ON b.subject = r.subject
+  )
+  -- Bước 5: Group by nhãn mới và sử dụng COUNT
+  SELECT 
+      display_subject AS subject,
+      COUNT(doi) AS total_count,
+      COUNT(CASE WHEN yr = 2023 THEN 1 END) AS count_2023,
+      COUNT(CASE WHEN yr != 2023 THEN 1 END) AS count_excluding_2023
+  FROM mapped_data
+  GROUP BY display_subject
+  ORDER BY 
+      CASE WHEN display_subject = 'Others' THEN 1 ELSE 0 END ASC, 
+      total_count DESC;
